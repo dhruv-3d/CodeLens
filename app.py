@@ -1,16 +1,12 @@
-from langchain_core.prompts import PromptTemplate
-from langchain_community.document_loaders import WebBaseLoader
-
 import os
-from dotenv import load_dotenv
-from langchain_google_genai import GoogleGenerativeAI
 import streamlit as st
+from langchain_core.prompts import PromptTemplate
+from langchain_google_genai import GoogleGenerativeAI
 
 
-GEMINI_API_KEY = "AIzaSyDc3YuIaI3gMiLI25QgwYOGLXOhDPrvgXg"
-
-
+GEMINI_API_KEY = os.environ['GOOGLE_AI_API_KEY']
 llm = GoogleGenerativeAI(model="gemini-pro", google_api_key=GEMINI_API_KEY)
+
 
 def get_response(query):
     response = ""
@@ -19,8 +15,6 @@ def get_response(query):
         response += chunks
     
     return response
-
-
 
 
 def build_prompt(code):
@@ -43,10 +37,15 @@ def build_prompt(code):
   return prompt
 
 
+st.title(":blue[CodeLens]:computer::mag:")
+st.subheader("""CodeLense provides code validation by pointing out errors or bugs in your code, suggests code optimization & recommendations on your code!""")
 
+st.markdown("___")
+st.markdown("#### Provide your code below to and click on 'Analyze' button below to get started!")
 code = st.text_area("Code to Analyze:", key="codeInput")
 submit_button = st.button("Analyze")
 print(code)
+
 
 if submit_button:
   my_prompt = build_prompt(code)
